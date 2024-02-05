@@ -1,0 +1,56 @@
+@page "/SendEmail"
+@using BlazorApp.Domain
+@using BlazorApp.Service
+@inject IEmailService EmailService
+
+<h3>Send Email</h3>
+
+<div>
+    <label>Receiver:</label>
+    <input @bind="Receiver" />
+</div>
+
+<div>
+    <label>Title:</label>
+    <input @bind="Title" />
+</div>
+
+<div>
+    <label>Body:</label>
+    <textarea @bind="Body"></textarea>
+</div>
+
+<button @onclick="SendEmailButton">Send Email</button>
+
+
+
+@if (isEmailSent)
+{
+    <p>Email sent successfully!</p>
+}
+
+@code {
+
+    public List<Email> emails { get; set; } = new();
+
+    public string Receiver { get; set; }
+    public string Title { get; set; }
+    public string Body { get; set; }
+    private bool isEmailSent = false;
+
+    private void SendEmailButton()
+    {
+        var email = new Email
+        {
+            Receiver = Receiver,
+            Title = Title,
+            Body = Body,
+            TimeSent = DateTime.Now
+        };
+        EmailService.SendEmail(email);
+
+        emails.Add(email);
+        isEmailSent = true;
+    }
+
+}

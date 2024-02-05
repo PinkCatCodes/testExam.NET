@@ -1,0 +1,31 @@
+
+@using BlazorApp.Domain
+@using BlazorApp.Service
+@inject IEmailService EmailService
+
+
+<h3>In </h3>
+<p>
+    @Emails.Count(e => e.Receiver == "You")
+
+</p>
+
+<h3>Out </h3>
+<p>
+    @Emails.Count(e => e.Sender == "You")
+   
+</p>
+
+@code {
+
+    [Parameter]
+    public int  Id { get; set; }
+
+    public List<Email> Emails { get; set; } = new ();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Emails = EmailService.GetEmails();
+    }
+
+}

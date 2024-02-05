@@ -1,0 +1,60 @@
+@page "/ViewEmail"
+
+
+@using BlazorApp.Domain
+@using BlazorApp.Service
+@inject IEmailService EmailService
+
+<h3>Emails List</h3>
+
+<EmailStats />
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Sender</th>
+        <th>Title</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var email in emails)
+    {
+        <tr>
+            <td><a style="cursor:pointer" @onclick="() => ShowEmailDetails(email.Id)">@email.Sender</a></td>
+            <td>@email.Title</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
+
+
+@if (selectedEmail != null)
+{
+    <div>
+        <h4>Email Details</h4> 
+        
+        <p><strong>Sender:</strong> @selectedEmail.Sender</p>
+        <p><strong>Title:</strong> @selectedEmail.Title</p>
+        <p><strong>Body:</strong> @selectedEmail.Body</p>
+        <p><strong>Time Sent:</strong> @selectedEmail.TimeSent.ToString("yyyy-MM-dd HH:mm:ss")</p>
+       
+    </div>
+}
+
+@code {
+    private List<Email> emails;
+    private Email selectedEmail;
+    
+    protected override void OnInitialized()
+    {
+        emails = EmailService.GetEmails();
+    }
+
+    private void ShowEmailDetails(int emailId)
+    {
+        selectedEmail = EmailService.GetEmailById(emailId);
+    }
+    
+}
